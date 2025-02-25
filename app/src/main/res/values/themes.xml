@@ -1,0 +1,45 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.News" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary color (used for app bars, buttons, etc.) -->
+        <item name="colorPrimary">@color/dark_blue0</item>
+        <item name="colorOnPrimary">@color/white</item>
+
+        <!-- Secondary color (used for floating action buttons, selection controls, etc.) -->
+        <item name="colorSecondary">@color/blue</item>
+        <item name="colorOnSecondary">@color/white</item>
+
+        <!-- Surface color (used for backgrounds of cards, sheets, menus, etc.) -->
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/black</item>
+
+        <!-- Background color (used for the background of the app) -->
+        <item name="android:colorBackground">@color/light_grey</item>
+        <item name="colorOnBackground">@color/black</item>
+
+        <!-- Primary container (used for subtle backgrounds or containers) -->
+        <item name="colorPrimaryContainer">@color/dark_blue1</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+
+        <!-- Error color (used for error messages and icons) -->
+        <item name="colorError">@color/light_blue</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Secondary container (used for subtle backgrounds or containers) -->
+        <item name="colorSecondaryContainer">@color/light_blue</item>
+        <item name="colorOnSecondaryContainer">@color/black</item>
+
+        <!-- Surface variant (used for subtle differences in surfaces) -->
+        <item name="colorSurfaceVariant">@color/light_grey</item>
+        <item name="colorOnSurfaceVariant">@color/grey</item>
+
+        <!-- Outline color (used for borders and dividers) -->
+        <item name="colorOutline">@color/grey</item>
+
+
+
+    </style>
+
+    <style name="Theme.News" parent="Base.Theme.News" />
+    
+</resources>

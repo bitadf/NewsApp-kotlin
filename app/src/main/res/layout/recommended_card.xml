@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center_vertical">
+
+    <androidx.cardview.widget.CardView
+        app:cardUseCompatPadding="true"
+        app:contentPadding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:clipToPadding="true"
+        app:cardCornerRadius="15dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/category_recommended_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/image_background"
+                android:text="Category"
+                android:textSize="10dp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:layout_margin="4dp"
+                android:elevation="4dp"
+                android:padding="4dp"
+
+
+                />
+            <ImageView
+
+                android:id="@+id/image_recommended_card"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/baseline_person_24"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                android:id="@+id/title_recommended_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+               android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="4dp"
+                android:text="Title"
+                android:textColor="@color/dark_blue0"
+                android:textSize="18sp"
+                android:maxLines="3"
+                android:minLines="3"
+                android:ellipsize="end"
+                android:textStyle="bold"
+
+                app:layout_constraintTop_toBottomOf="@id/image_recommended_card"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
