@@ -66,20 +66,7 @@ class MainActivity : AppCompatActivity() {
         toolBar = binding.toolbar
         setSupportActionBar(toolBar)
 
-//        toolBar.setOnMenuItemClickListener {
-//            toolbarItem ->
-//            when(toolbarItem.itemId){
-//                R.id.toolbar_search ->{
-//                    Toast.makeText(this , R.string.search, Toast.LENGTH_SHORT).show()
-//                    true
-//                }
-//                R.id.toolbar_notification ->{
-//                    Toast.makeText(this , R.string.notification, Toast.LENGTH_SHORT).show()
-//                    true
-//                }
-//                else -> TODO()
-//            }
-//        }
+
 
         bottomNavigationView.setOnItemSelectedListener {
             menuItem ->
@@ -108,7 +95,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this , R.string.profile, Toast.LENGTH_SHORT).show()
                     true
                 }
-                else -> TODO()
+                else -> true
             }
         }
 
