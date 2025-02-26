@@ -1,6 +1,7 @@
 package com.example.news.viewModel
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,8 +13,10 @@ import kotlinx.coroutines.launch
 class NewsViewModel : ViewModel() {
     private val repository = NewsRepository()
     val newArticles = MutableLiveData<List<Article>?>()
+    val favoriteCategories = MutableLiveData<List<String>>()
 
     val errorMessage = MutableLiveData<String>()
+
 
 
     fun getNews(query : String , date : String){
