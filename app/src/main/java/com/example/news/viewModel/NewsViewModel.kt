@@ -8,17 +8,59 @@ import androidx.lifecycle.viewModelScope
 import com.example.news.data.Article
 import com.example.news.repository.NewsRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 
 class NewsViewModel : ViewModel() {
     private val repository = NewsRepository()
     val newArticles = MutableLiveData<List<Article>?>()
-    val favoriteCategories = MutableLiveData<List<String>>()
+    private var favoriteCategories = MutableLiveData<List<String>>().apply {
+        value = listOf("Business"  , "Science" , "Sports")
+    }
 
     val errorMessage = MutableLiveData<String>()
 
+    val recommendedArticles = MutableLiveData<List<Article>?>()
+    fun fetchRecommendedNews(){
+
+        viewModelScope.launch (Dispatchers.IO){
+            // Wait for favorite categories to be loaded
+//            favoriteCategories.value ?: fetchFavorite()
+            val categories = favoriteCategories.value ?: emptyList()
+
+            if(categories.isEmpty())return@launch
+            val deferredResults = categories.map { category->
+                async {
+                    try {
+                        val response = repository.getCategoryNews("us" , category)
+                        if(response.isSuccessful){
+                            response.body()?.articles?.take(2) ?: emptyList()
+                        }
+                        else{
+                            emptyList()
+                        }
+                    }
+                    catch (e : Exception){
+                        emptyList()
+                    }
+                }
+            }
+            val results = deferredResults.awaitAll()
+            val allArticles = results.flatten().shuffled()
+            recommendedArticles.postValue(allArticles)
+
+        }
+    }
 
 
+    fun fetchFavorite(){
+        viewModelScope.launch(Dispatchers.IO) {
+            val test = listOf("Business" , "Science" , "Sports")
+                favoriteCategories.postValue(test)
+
+        }
+    }
     fun getNews(query : String , date : String){
         viewModelScope.launch (Dispatchers.IO){
             try {

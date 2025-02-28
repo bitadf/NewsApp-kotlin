@@ -11,9 +11,9 @@
         app:iconTint="@color/white"
         />
     <item
-        android:id="@+id/toolbar_notification"
+        android:id="@+id/toolbar_dark_mode"
         android:title="@string/notification"
-        android:icon="@drawable/baseline_notifications_24"
+        android:icon="@drawable/baseline_dark_mode_24"
         app:showAsAction="ifRoom|collapseActionView"
         app:iconTint="@color/white"
         />

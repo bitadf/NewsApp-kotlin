@@ -16,6 +16,7 @@ import com.example.news.R
 import com.example.news.adapter.ViewPagerAdapter
 import com.example.news.databinding.ActivityMainBinding
 import com.example.news.news_fragments.SearchResultsFragment
+import com.example.news.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -92,7 +93,11 @@ class MainActivity : AppCompatActivity() {
                 R.id.bottom_profile ->{
                     SetSearchFrame(binding.viewPager2 , binding.searchFrameContainer ,
                         binding.tabLayout , binding.bottomNavigation , false)
-                    Toast.makeText(this , R.string.profile, Toast.LENGTH_SHORT).show()
+                    setProfileFrame(binding.viewPager2 , binding.searchFrameContainer , binding.tabLayout , binding.bottomNavigation , true)
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.search_frame_container , ProfileFragment())
+                        .addToBackStack(null)
+                        .commit()
                     true
                 }
                 else -> true
@@ -151,7 +156,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.toolbar_notification -> {
+            R.id.toolbar_dark_mode -> {
 
                 Toast.makeText(this, R.string.notification, Toast.LENGTH_SHORT).show()
                 true
@@ -180,6 +185,22 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+    }
+    private fun setProfileFrame(viewPager2: ViewPager2 , profileFrame : FrameLayout ,
+                                tabLayout: TabLayout , bottomNavigationView: BottomNavigationView , mode : Boolean){
+        if(!mode){
+            viewPager2.visibility = View.VISIBLE
+            tabLayout.visibility = View.VISIBLE
+            bottomNavigationView.visibility = View.VISIBLE
+            profileFrame.visibility = View.GONE
+        }
+        else{
+            //show
+            viewPager2.visibility = View.GONE
+            tabLayout.visibility = View.GONE
+            bottomNavigationView.visibility = View.VISIBLE
+            profileFrame.visibility = View.VISIBLE
+        }
     }
     private fun SetSearchFrame(
         viewPager2: ViewPager2, searchFragment:FrameLayout,

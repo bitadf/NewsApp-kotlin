@@ -62,6 +62,10 @@ dependencies {
     implementation(libs.androidx.recyclerview)
 
 
+    ////for viewModels()
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
+
     implementation(libs.androidx.appcompat)
 
     // Glide with correct configuration
@@ -89,7 +93,9 @@ dependencies {
     kapt(libs.androidx.room.compiler)  // Changed to kapt
 
     // JetBrains annotations
-    implementation("org.jetbrains:annotations:23.0.0")
+    implementation(libs.jetbrains.annotations)
+
+    implementation(libs.fragment)
 }
 
 // Add resolution strategy to handle duplicate classes

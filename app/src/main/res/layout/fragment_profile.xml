@@ -45,7 +45,7 @@
         app:layout_constraintTop_toBottomOf="@id/profile_icon"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="20dp"
-        android:textSize="18dp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:textColor="@color/dark_blue0"
         android:text="Full Name"
@@ -59,8 +59,7 @@
         app:layout_constraintTop_toBottomOf="@id/name_text"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp"
-        android:textSize="12dp"
-
+        android:textSize="12sp"
         android:textColor="@color/dark_blue1"
         android:text="Email"
         android:gravity="center"
@@ -138,7 +137,7 @@
         <com.google.android.material.imageview.ShapeableImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:id="@+id/edit_profile_icon"
+            android:id="@+id/edit_category_icon"
             android:src="@drawable/baseline_category_24"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CircularImageView"
             android:background="@color/blue"

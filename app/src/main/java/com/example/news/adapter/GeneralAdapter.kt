@@ -92,10 +92,6 @@ class GeneralAdapter(
 
             // Update the ViewModel immediately
             onBookmarkClick(item, newBookmarkState)
-//
-//
-//            // Notify adapter to refresh only this item
-//            notifyItemChanged(position)
         }
 
 

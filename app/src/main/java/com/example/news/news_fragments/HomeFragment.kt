@@ -10,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.util.newStringBuilder
 import com.example.news.adapter.GeneralAdapter
 import com.example.news.adapter.RecommendedAdapter
 import com.example.news.viewModel.CacheNewsViewModel
@@ -28,12 +30,14 @@ import com.example.news.viewModel.NewsViewModel
 class HomeFragment : Fragment() {
 
     private lateinit var binding : FragmentHomeBinding
-    private lateinit var viewModel : NewsViewModel
+    private val viewModel : NewsViewModel by activityViewModels()
     private lateinit var generalAdapter: GeneralAdapter
+   // private var recommendedNews = mutableListOf<News>()
+    private lateinit var recommendedAdapter: RecommendedAdapter
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View{
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,63 +45,67 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+        //cacheView model
         val cacheLimit = 10
         val cacheViewModel = ViewModelProvider(this , NewsViewModelFactory(requireActivity().application , cacheLimit))
             .get(CacheNewsViewModel::class.java)
 
-
-        val recommendedNews = arrayOf(
-            News("https://media.wired.com/photos/67815aa7ced74e457dc3a71e/191:100/w_1280,c_limit/011025_Trumps-Crypto-Cabinet.jpg",
-            "long title testing title this is my title a looooonnnnngggggtitle " ,
-            "description of news is this bullshit that says fuck you description of news is this bullshit that says fuck you description of news is this bullshit that says fuck you description of news is this bullshit that says fuck you " ,
-            "General",
-            "22/01/11",
-                "url" ,
-                "Bita Derisfard"
-                ,"shit"
-            ),
-            News("https://media.wired.com/photos/67815aa7ced74e457dc3a71e/191:100/w_1280,c_limit/011025_Trumps-Crypto-Cabinet.jpg",
-                "long title testing title this is my title " ,
-                "description of news is this bullshit that says fuck you" ,
-                "General",
-                "22/01/11",
-                "url" ,
-                "Bita Derisfard",
-                "shit"
-            ),
-            News("https://media.wired.com/photos/67815aa7ced74e457dc3a71e/191:100/w_1280,c_limit/011025_Trumps-Crypto-Cabinet.jpg",
-                "long title testing title this is my title " ,
-                "description of news is this bullshit that says fuck you" ,
-                "General",
-                "22/01/11",
-                "url" ,
-                "Bita Derisfard" ,
-                "shit"
-            ), News("https://media.wired.com/photos/67815aa7ced74e457dc3a71e/191:100/w_1280,c_limit/011025_Trumps-Crypto-Cabinet.jpg",
-                "long title testing title this is my title " ,
-                "description of news is this bullshit that says fuck you" ,
-                "General",
-                "22/01/11",
-                "url" ,
-                "Bita Derisfard" ,
-                "shit"
-            )
+        val recommendedRecycler : RecyclerView = binding.recommendedRecyclerView
+        val itemsToShow = 2.5f
+        recommendedRecycler.layoutManager = LinearLayoutManager(
+            requireContext() ,
+            LinearLayoutManager.HORIZONTAL ,
+            false
         )
-
-        val recommendedRecycler: RecyclerView = binding.recommendedRecyclerView
-        val itemsToShow = 2.5f // Show 2.5 items at once (adjust as needed)
-
-        // Set up the RecyclerView
-        recommendedRecycler.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        val recommendedAdapter = RecommendedAdapter(requireContext(), recommendedNews)
+        recommendedAdapter = RecommendedAdapter(requireContext() , emptyList())
         recommendedRecycler.adapter = recommendedAdapter
-
-        // Add the custom ItemDecoration
         recommendedRecycler.addItemDecoration(HorizontalItemDecoration(itemsToShow))
-
-        // Add SnapHelper for ViewPager-like behavior
         val snapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(recommendedRecycler)
+
+
+        viewModel.recommendedArticles.observe(viewLifecycleOwner){
+            articles ->
+            val newsItems = articles?.map { article ->
+                News(
+                    image = article.urlToImage ,
+                    title = article.title ,
+                    description = article.description ,
+                    date = article.publishedAt ,
+                    source = article.url ,
+                    author = article.author ,
+                    category = "General",
+                    content = article.content
+
+                )
+            }
+            newsItems?.let {
+                recommendedAdapter.updateNews(it)
+            }
+        }
+        viewModel.fetchRecommendedNews()
+        recommendedAdapter.onItemClick = {news ->
+            val cachedNews = CachedNews(
+                id = news.title.hashCode().toString() ,
+                title = news.title ,
+                description = news.description,
+                publishedAt = news.date ,
+                author = news.author ,
+                content = news.content ,
+                category = "General" ,
+                source = news.source,
+                image = news.image ,
+                timestamp = System.currentTimeMillis()
+
+            )
+            cacheViewModel.cacheNews(cachedNews)
+            val intent = Intent(requireContext() , NewsActivity::class.java).apply {
+                putExtra("news" , news)
+            }
+            startActivity(intent)
+        }
+
         //////////////////////////////////////
 
         //set up adapter
@@ -138,7 +146,7 @@ class HomeFragment : Fragment() {
         recyclerView.isNestedScrollingEnabled = false
 
         //view model
-        viewModel = ViewModelProvider(this).get(NewsViewModel::class.java)
+//        viewModel = ViewModelProvider(this).get(NewsViewModel::class.java)
 
         //observe data
         viewModel.newArticles.observe(viewLifecycleOwner){
