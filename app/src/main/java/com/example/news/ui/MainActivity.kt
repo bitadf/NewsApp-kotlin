@@ -1,5 +1,8 @@
 package com.example.news.ui
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,6 +12,7 @@ import android.widget.FrameLayout
 
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.viewpager2.widget.ViewPager2
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
@@ -33,12 +37,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewPager2: ViewPager2
 
     private lateinit var adapter: ViewPagerAdapter
-    
+
+    private lateinit var sharedPref : SharedPreferences
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        ////initialize SharedPreferences tot persist the mode
+        sharedPref = getSharedPreferences("app_prefs" , Context.MODE_PRIVATE)
+        val isNightMode = sharedPref.getBoolean("night_mode" , false )
+        AppCompatDelegate.setDefaultNightMode(
+            if(isNightMode)AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        )
 
         tablayout = binding.tabLayout
         viewPager2 = binding.viewPager2
@@ -110,6 +122,16 @@ class MainActivity : AppCompatActivity() {
         //return super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.toolbar_menu , menu)
 
+        val darkModeSwitch = menu?.findItem(R.id.toolbar_dark_mode)
+        val  currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        if (darkModeSwitch != null) {
+            darkModeSwitch.title = if (currentNightMode == Configuration.UI_MODE_NIGHT_YES){
+                "Switch to Light Mode"
+            }else{
+                "Switch to Dark Mode"
+            }
+        }
+        /////////////////////////
         val  searchItem = menu?.findItem(R.id.toolbar_search)
         val searchView = searchItem?.actionView as SearchView
 
@@ -157,8 +179,20 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.toolbar_dark_mode -> {
+                val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
 
-                Toast.makeText(this, R.string.notification, Toast.LENGTH_SHORT).show()
+                val newMode = if(currentNightMode == Configuration.UI_MODE_NIGHT_YES){
+                    AppCompatDelegate.MODE_NIGHT_NO
+                }else{
+                    AppCompatDelegate.MODE_NIGHT_YES
+                }
+                AppCompatDelegate.setDefaultNightMode(newMode)
+
+                val isNightMode = newMode == AppCompatDelegate.MODE_NIGHT_YES
+                with(sharedPref.edit()) {
+                    putBoolean("night_mode", isNightMode)
+                    apply()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
